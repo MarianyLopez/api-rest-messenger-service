@@ -1,12 +1,15 @@
 package com.api.messengerservice.entities;
 
+import com.api.messengerservice.utils.PackageType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
-@Table (name = "Package")
+@Setter
+@Table (name = "package")
 public class Package {
 
     @Id
@@ -22,14 +25,10 @@ public class Package {
     @NotNull (message = "The declared value cannot be null")
     private double declaredValue;
 
-    @OneToOne
-    @JoinColumn(name = "shipment_id")
-    private Shipment shipment;
-
     public Package() {
     }
 
-    public Package(double weight, double declaredValue, Shipment shipment) {
+    public Package(double weight, double declaredValue) {
         this.weight = weight;
         if (weight < 2)
             packageType = PackageType.LIGHTWEIGHT.getNameSpanish();
@@ -38,10 +37,5 @@ public class Package {
         else
             packageType = PackageType.LARGE.getNameSpanish();
         this.declaredValue = declaredValue;
-        this.shipment = shipment;
-    }
-
-    public void setShipment(Shipment shipment) {
-        this.shipment = shipment;
     }
 }

@@ -1,5 +1,6 @@
 package com.api.messengerservice.controllers;
 
+import com.api.messengerservice.dtos.EmployeeDTO;
 import com.api.messengerservice.entities.Employee;
 import com.api.messengerservice.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +21,18 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody Employee employee){
+    public ResponseEntity<Object> create(@RequestBody EmployeeDTO employeeDTO){
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.create(employee));
+            return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.create(employeeDTO));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable("id") Long id, @RequestBody Employee employee){
+    public ResponseEntity<Object> update(@PathVariable("id") Long id, @RequestBody EmployeeDTO employeeDTO){
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(employeeService.update(id,employee));
+            return ResponseEntity.status(HttpStatus.OK).body(employeeService.update(id,employeeDTO));
         }catch (NullPointerException e){
             return new  ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }

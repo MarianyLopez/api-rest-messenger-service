@@ -1,7 +1,8 @@
 package com.api.messengerservice.services;
+import com.api.messengerservice.dtos.ClientDTO;
 import com.api.messengerservice.entities.Client;
 import com.api.messengerservice.exceptions.InvalidCreateEntityException;
-import com.api.messengerservice.exceptions.IsNotExistEntityException;
+import com.api.messengerservice.exceptions.DoesNotExistEntityException;
 import com.api.messengerservice.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,28 +19,27 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public Client create (Client client) {
-        if (clientRepository.findById(client.getId()).isPresent())
+    public Client create (ClientDTO clientDTO) {
+        if (clientRepository.findById(clientDTO.getId()).isPresent())
             throw new InvalidCreateEntityException("Error: The client already exists");
         else
-            return clientRepository.save(client);
+            return clientRepository.save(createClient(clientDTO));
     }
 
-    public Optional<Client> update (Long id, Client client) {
-
+    public Optional<Client> update (Long id, ClientDTO clientDTO) {
         Optional<Client> clientDb = clientRepository.findById(id);
 
         if (clientDb.isEmpty())
-            throw new IsNotExistEntityException ("Error : The employee with ID " + id + " does not exist");
+            throw new DoesNotExistEntityException("Error : The employee with ID " + id + " does not exist");
         else {
             return clientDb
                     .map(clientSave -> {
-                        clientSave.setName(client.getName());
-                        clientSave.setLastName(client.getLastName());
-                        clientSave.setEmail(client.getEmail());
-                        clientSave.setPhoneNumber(client.getPhoneNumber());
-                        clientSave.setAddress(client.getAddress());
-                        clientSave.setCity(client.getCity());
+                        clientSave.setName(clientDTO.getName());
+                        clientSave.setLastName(clientDTO.getLastName());
+                        clientSave.setEmail(clientDTO.getEmail());
+                        clientSave.setPhoneNumber(clientDTO.getPhoneNumber());
+                        clientSave.setAddress(clientDTO.getAddress());
+                        clientSave.setCity(clientDTO.getCity());
 
                         return clientRepository.save(clientSave);
                     });
@@ -57,14 +57,19 @@ public class ClientService {
     }
 
     public Optional<Client> getClientById (Long id) {
-
         Optional<Client> clientDb = clientRepository.findById(id);
 
         if (clientDb.isEmpty())
-            throw new IsNotExistEntityException("Error : The client with ID " + id + " does not exist");
+            throw new DoesNotExistEntityException("Error : The client with ID " + id + " does not exist");
         else
             return clientDb;
 
 
+    }
+
+    private Client createClient(ClientDTO clientDTO){
+        return new Client(clientDTO.getId(), clientDTO.getName(), clientDTO.getLastName(),
+                clientDTO.getPhoneNumber(), clientDTO.getEmail(), clientDTO.getAddress(),
+                clientDTO.getCity());
     }
 }

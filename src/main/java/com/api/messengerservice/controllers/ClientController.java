@@ -1,5 +1,6 @@
 package com.api.messengerservice.controllers;
 
+import com.api.messengerservice.dtos.ClientDTO;
 import com.api.messengerservice.entities.Client;
 import com.api.messengerservice.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +20,20 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create (@RequestBody Client client) {
+    public ResponseEntity<Object> create (@RequestBody ClientDTO clientDTO) {
 
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(clientService.create(client));
+            return ResponseEntity.status(HttpStatus.OK).body(clientService.create(clientDTO));
         }catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update (@PathVariable("id") Long id, @RequestBody Client client) {
+    public ResponseEntity<Object> update (@PathVariable("id") Long id, @RequestBody ClientDTO clientDTO) {
 
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(clientService.update(id,client));
+            return ResponseEntity.status(HttpStatus.OK).body(clientService.update(id,clientDTO));
         }catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

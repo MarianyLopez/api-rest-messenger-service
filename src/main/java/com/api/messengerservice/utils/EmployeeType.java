@@ -1,4 +1,4 @@
-package com.api.messengerservice.entities;
+package com.api.messengerservice.utils;
 
 public enum EmployeeType {
 

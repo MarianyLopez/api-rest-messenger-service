@@ -1,4 +1,4 @@
-package com.api.messengerservice.entities;
+package com.api.messengerservice.utils;
 
 public enum DeliveryStatus {
     RECIBED("Recibido"),
@@ -9,5 +9,9 @@ public enum DeliveryStatus {
 
     DeliveryStatus(String nameSpanish) {
         this.nameSpanish = nameSpanish;
+    }
+
+    public String getNameSpanish() {
+        return nameSpanish;
     }
 }
