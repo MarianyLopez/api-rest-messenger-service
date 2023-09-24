@@ -43,7 +43,7 @@ public class ShipmentController {
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateDeliveryStatus (@RequestBody @RequestParam Map<String,Object> map) {
+    public ResponseEntity<Object> updateDeliveryStatus (@RequestBody Map<String,Object> map) {
         try {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(shipmentService.updateDeliveryStatus(map));
         }catch (RuntimeException e) {

@@ -9,12 +9,9 @@ import java.util.List;
 
 @Repository
 public interface ShipmentRepository extends JpaRepository<Shipment,String> {
+    List<Shipment> findByDeliveryStatus( String deliveryStatus);
 
-
-
-
-    @Query("SELECT s FROM Shipment s WHERE s.deliveryStatus= :deliveryStatus")
-    List<Shipment> findAllByDeliveryStatus(@Param("deliveryStatus") String deliveryStatus);
+    List<Shipment> findByClientId(Long id);
 
 }
 

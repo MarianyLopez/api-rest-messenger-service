@@ -96,7 +96,7 @@ public class ShipmentService {
         Optional<Employee> employeeDB = employeeRepository.findById(((Number)map.get("employeeID")).longValue());
         if (employeeDB.isPresent()){
             if (isCorrectDeliveryStatus(map.get("deliveryStatus").toString())) {
-                List<Shipment> shipments = shipmentRepository.findAllByDeliveryStatus(map.get("deliveryStatus").toString());
+                List<Shipment> shipments = shipmentRepository.findByDeliveryStatus(map.get("deliveryStatus").toString());
                 List<ShipmentDTO> shipmentDTOS = new ArrayList<>();
                 for (Shipment shipment: shipments) {
                     ShipmentDTO shipmentDTO = createShipmentDTO(shipment);
