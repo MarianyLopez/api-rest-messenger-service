@@ -14,14 +14,14 @@ public class Package {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column
+    @Column (nullable = false)
     private Long id;
-    @Column
+    @Column (nullable = false,length = 7)
     private String packageType;
-    @Column
+    @Column (nullable = false)
     @NotNull (message = "The weight cannot be null")
     private double weight;
-    @Column
+    @Column (nullable = false)
     @NotNull (message = "The declared value cannot be null")
     private double declaredValue;
 

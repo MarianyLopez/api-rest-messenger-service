@@ -18,26 +18,27 @@ public class Shipment {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id",nullable = false)
     private Client client;
-    @Column
+    @Column (nullable = false,length = 20)
     private String originCity;
-    @Column
+    @Column (nullable = false,length = 20)
     private String destinationCity;
-    @Column
+    @Column (nullable = false,length = 50)
     private String destinationAddress;
-    @Column
+    @Column (nullable = false,length = 50)
     private String namePersonReceives;
-    @Column
+    @Column (nullable = false,length = 15)
     private String phonePersonReceives;
-    @Column
+    @Column (nullable = false)
     private LocalTime deliveryTime;
-    @Column
+    @Column (nullable = false,length = 10)
     private String deliveryStatus;
-    @Column
+    @Column (nullable = false)
     private double shipmentPrice;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "package_id",nullable = false)
     private Package aPackage;
 
     public Shipment() {
