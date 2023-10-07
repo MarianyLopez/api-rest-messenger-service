@@ -60,17 +60,17 @@ public class EmployeeService {
             employeeRepository.deleteById(id);
             return "message : The employee with ID " + id + " was successfully removed";
         }
-        return "message: The employee with ID " + id + " does not exist";
+        throw new DoesNotExistEntityException("Error : The employee with ID " + id + " does not exist");
     }
 
-    public Optional<Employee> getEmployeeById (Long id){
+    public Employee getEmployeeById (Long id){
 
         Optional<Employee> employeeDb = employeeRepository.findById(id);
 
         if (employeeDb.isEmpty())
             throw new DoesNotExistEntityException("Error : The employee with ID " + id + " does not exist");
         else
-            return employeeDb;
+            return employeeDb.get();
     }
     private boolean isCorrectEmployeeType (EmployeeDTO employeeDTO) {
         return employeeDTO.getEmployeeType().equalsIgnoreCase(EmployeeType.COORDINATOR.getNameSpanish()) || employeeDTO.getEmployeeType().equalsIgnoreCase(EmployeeType.DISTRIBUTOR.getNameSpanish()) || employeeDTO.getEmployeeType().equalsIgnoreCase(EmployeeType.DRIVER.getNameSpanish());

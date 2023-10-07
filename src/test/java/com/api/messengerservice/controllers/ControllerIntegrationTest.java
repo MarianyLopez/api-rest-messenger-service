@@ -1,0 +1,110 @@
+package com.api.messengerservice.controllers;
+
+import com.api.messengerservice.dtos.ClientDTO;
+import com.api.messengerservice.dtos.EmployeeDTO;
+import com.api.messengerservice.exceptions.DoesNotExistEntityException;
+import com.api.messengerservice.exceptions.InvalidCreateEntityException;
+import com.api.messengerservice.exceptions.InvalidEmployeeTypeException;
+import com.api.messengerservice.services.ClientService;
+import com.api.messengerservice.services.EmployeeService;
+import com.api.messengerservice.services.ShipmentService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class ControllerIntegrationTest {
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private ClientService clientService;
+    @MockBean
+    private EmployeeService employeeService;
+    @MockBean
+    private ShipmentService shipmentService;
+
+    @Test
+    void statusBadRequestOnClientCreationBecauseClientAlreadyExist() throws Exception {
+        ClientDTO clientDTO = new ClientDTO(1001L,"Dilan","Quintero","3006782537","dilan@gmail.com","Carrera 35","Medellín");
+
+        Mockito.when(clientService.create(Mockito.any(ClientDTO.class))).thenThrow(new InvalidCreateEntityException("Error : The client already exists"));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/client")
+                        .content(new ObjectMapper().writeValueAsString(clientDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void statusConflictOnClientCreationBecauseClientArgumentsAreNull() throws Exception {
+        ClientDTO clientDTO = new ClientDTO();
+
+        Mockito.when(clientService.create(Mockito.any(ClientDTO.class))).thenThrow(new IllegalArgumentException("Error : Client arguments cannot be null"));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/client")
+                        .content(new ObjectMapper().writeValueAsString(clientDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void statusOkOnGetClientByIdBecauseClientExists() throws Exception {
+        Long idClient = 123L;
+        ClientDTO clientDTO = new ClientDTO();
+        clientDTO.setId(idClient);
+
+        Mockito.when(clientService.getClientById(idClient)).thenThrow(new DoesNotExistEntityException("Error : The client with ID " + idClient + " does not exist"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/client/{id}",idClient))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void statusConflictOnEmployeeCreationBecauseEmployeeTypeIsInvalid() throws Exception {
+        EmployeeDTO employeeDTO = new EmployeeDTO(123L,"Arley","Aestetic","32445","josueestetik@gmail.com","Calle 13","Caldas",4,"A-","Calvo");
+
+        Mockito.when(employeeService.create(Mockito.any(EmployeeDTO.class))).thenThrow(new InvalidEmployeeTypeException("Error : The employee has not been created because the employee type is not valid"));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/employee")
+                        .content(new ObjectMapper().writeValueAsString(employeeDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void statusConflictOnShimpmentDeliveryStatusUpdate() throws Exception {
+        Map<String,Object> map = new HashMap<>();
+        map.put("guideNumber", "GUIDENUMBER123");
+        map.put("deliveryStatus", "BlueLabel");
+        map.put("employeeID", 1234L);
+
+        Mockito.when(shipmentService.updateDeliveryStatus(Mockito.anyMap())).thenThrow(new RuntimeException("The status change does not comply with validations"));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/shipment")
+                .content(new ObjectMapper().writeValueAsString(map))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+}
+
+

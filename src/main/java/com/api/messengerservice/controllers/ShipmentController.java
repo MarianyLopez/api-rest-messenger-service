@@ -1,13 +1,14 @@
 package com.api.messengerservice.controllers;
 
 import com.api.messengerservice.dtos.ShipmentDTO;
-import com.api.messengerservice.repositories.ClientRepository;
+import com.api.messengerservice.dtos.ShipmentMessageDTO;
 import com.api.messengerservice.services.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -16,46 +17,27 @@ public class ShipmentController {
 
     @Autowired
     private ShipmentService shipmentService;
-    private final ClientRepository clientRepository;
 
-    public ShipmentController(ShipmentService shipmentService,
-                              ClientRepository clientRepository) {
+    public ShipmentController(ShipmentService shipmentService) {
         this.shipmentService = shipmentService;
-        this.clientRepository = clientRepository;
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody ShipmentDTO shipmentDTO){
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(shipmentService.create(shipmentDTO));
-        }catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    @GetMapping
-    public ResponseEntity<Object> getShipmentInformation(@RequestBody Map<String,String> guideNumberJson) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(shipmentService.getShipmentInformation(guideNumberJson));
-        }catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<ShipmentMessageDTO> create(@RequestBody ShipmentDTO shipmentDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(shipmentService.create(shipmentDTO));
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateDeliveryStatus (@RequestBody Map<String,Object> map) {
-        try {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(shipmentService.updateDeliveryStatus(map));
-        }catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+    public ResponseEntity<ShipmentMessageDTO> updateDeliveryStatus(@RequestBody Map<String,Object> map) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(shipmentService.updateDeliveryStatus(map));
+    }
+
+    @GetMapping
+    public ResponseEntity<ShipmentDTO> getShipmentInformation(@RequestBody Map<String,String> guideNumberJson) {
+        return ResponseEntity.status(HttpStatus.OK).body(shipmentService.getShipmentInformation(guideNumberJson));
     }
     @GetMapping("/list")
-    public ResponseEntity<Object> getShipmentByDeliveryStatus (@RequestBody Map<String,Object> map) {
-        try {
-            return  ResponseEntity.status(HttpStatus.OK).body(shipmentService.getShipmentByDeliveryStatus(map));
-        }catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<List<ShipmentDTO>> getShipmentByDeliveryStatus (@RequestBody Map<String,Object> map) {
+        return  ResponseEntity.status(HttpStatus.OK).body(shipmentService.getShipmentByDeliveryStatus(map));
     }
 }

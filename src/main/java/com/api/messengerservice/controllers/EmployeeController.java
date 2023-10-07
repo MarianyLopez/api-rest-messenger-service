@@ -21,35 +21,23 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody EmployeeDTO employeeDTO){
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.create(employeeDTO));
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+    public ResponseEntity<Employee> create(@RequestBody EmployeeDTO employeeDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.create(employeeDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable("id") Long id, @RequestBody EmployeeDTO employeeDTO){
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(employeeService.update(id,employeeDTO));
-        }catch (NullPointerException e){
-            return new  ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Employee> update(@PathVariable("id") Long id, @RequestBody EmployeeDTO employeeDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(employeeService.update(id,employeeDTO).get());
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
-    public String delete(@PathVariable("id") Long id){
-        return employeeService.delete(id);
+    public ResponseEntity<String> delete(@PathVariable("id") Long id){
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(employeeService.delete(id));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getEmployeeById (@PathVariable ("id") Long id) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(employeeService.getEmployeeById(id));
-        }catch (NullPointerException e){
-            return new  ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Employee> getEmployeeById (@PathVariable ("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(employeeService.getEmployeeById(id));
     }
 }

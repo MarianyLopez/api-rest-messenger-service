@@ -20,42 +20,22 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create (@RequestBody ClientDTO clientDTO) {
-
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(clientService.create(clientDTO));
-        }catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        }
+    public ResponseEntity<Client> create (@RequestBody ClientDTO clientDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(clientService.create(clientDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update (@PathVariable("id") Long id, @RequestBody ClientDTO clientDTO) {
-
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(clientService.update(id,clientDTO));
-        }catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<Client> update (@PathVariable("id") Long id, @RequestBody ClientDTO clientDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(clientService.update(id,clientDTO).get());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete (@PathVariable("id") Long id) {
-
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(clientService.delete(id));
-        }catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<String> delete (@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(clientService.delete(id));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getClientById (@PathVariable("id") Long id) {
-
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(clientService.getClientById(id));
-        }catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<Client> getClientById (@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(clientService.getClientById(id));
     }
 }

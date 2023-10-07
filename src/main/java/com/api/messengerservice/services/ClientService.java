@@ -1,4 +1,5 @@
 package com.api.messengerservice.services;
+
 import com.api.messengerservice.dtos.ClientDTO;
 import com.api.messengerservice.entities.Client;
 import com.api.messengerservice.entities.Shipment;
@@ -27,7 +28,7 @@ public class ClientService {
 
     public Client create (ClientDTO clientDTO) {
         if (clientRepository.findById(clientDTO.getId()).isPresent())
-            throw new InvalidCreateEntityException("Error: The client already exists");
+            throw new InvalidCreateEntityException("Error : The client already exists");
         else
             return clientRepository.save(createClient(clientDTO));
     }
@@ -61,16 +62,16 @@ public class ClientService {
             clientRepository.deleteById(id);
             return "message : The client with ID " + id + " was successfully removed";
         }else
-            return "message: The client with ID " + id + " does not exist";
+            throw new DoesNotExistEntityException("Error : The client with ID " + id + " does not exist");
     }
 
-    public Optional<Client> getClientById (Long id) {
+    public Client getClientById (Long id) {
         Optional<Client> clientDb = clientRepository.findById(id);
 
         if (clientDb.isEmpty())
             throw new DoesNotExistEntityException("Error : The client with ID " + id + " does not exist");
         else
-            return clientDb;
+            return clientDb.get();
 
 
     }

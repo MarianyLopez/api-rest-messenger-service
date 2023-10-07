@@ -15,7 +15,6 @@ import com.api.messengerservice.repositories.ShipmentRepository;
 import com.api.messengerservice.utils.DeliveryStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,10 @@ public class ShipmentService {
         Optional<Client> client = clientRepository.findById(shipmentDTO.getClientID());
 
         if (client.isPresent()) {
-            Shipment shipmentToSave = new Shipment(client.get(),shipmentDTO.getOriginCity(),shipmentDTO.getDestinationCity(), shipmentDTO.getDestinationAddress(), shipmentDTO.getNamePersonReceives(), shipmentDTO.getPhonePersonReceives(),new Package(shipmentDTO.getWeight(), shipmentDTO.getDeclaredValue()));
+            Shipment shipmentToSave = new Shipment(client.get(),shipmentDTO.getOriginCity(),
+                    shipmentDTO.getDestinationCity(), shipmentDTO.getDestinationAddress(),
+                    shipmentDTO.getNamePersonReceives(), shipmentDTO.getPhonePersonReceives(),
+                    new Package(shipmentDTO.getWeight(), shipmentDTO.getDeclaredValue()));
             shipmentRepository.save(shipmentToSave);
             return new ShipmentMessageDTO(shipmentToSave.getId(),shipmentToSave.getDeliveryStatus());
         }
@@ -64,7 +66,7 @@ public class ShipmentService {
     private ShipmentDTO createShipmentDTO(Shipment shipment) {
         return new ShipmentDTO(shipment.getClient().getId(),shipment.getOriginCity(),shipment.getDestinationCity(),
                 shipment.getDestinationAddress(),shipment.getNamePersonReceives(),shipment.getPhonePersonReceives(),
-                shipment.getAPackage().getWeight(), shipment.getAPackage().getDeclaredValue(),shipment.getDeliveryStatus(),shipment.getShipmentPrice());
+                shipment.getAPackage().getWeight(), shipment.getAPackage().getDeclaredValue());
     }
 
     public ShipmentMessageDTO updateDeliveryStatus(Map<String,Object> map){
