@@ -1,58 +1,62 @@
 package com.api.messengerservice.security;
 
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@AllArgsConstructor
 public class WebSecurityConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+    private final UserDetailsService userDetailsService;
+    private JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(
-                User.withUsername("admin")
-                        .password(passwordEncoder().encode("admin123"))
-                        .authorities("ADMIN")
-                        .build(),
-                User.withUsername("employee")
-                        .password(passwordEncoder().encode("employee123"))
-                        .authorities("EMPLOYEE")
-                        .build(),
-                User.withUsername("client")
-                        .password(passwordEncoder().encode("client123"))
-                        .authorities("CLIENT")
-                        .build()
-        );
-    }
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authManager)throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter();
+        jwtAuthenticationFilter.setAuthenticationManager(authManager);
+        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationRequest -> authorizationRequest
-                        .requestMatchers("/api/v1/client").hasAnyAuthority("CLIENT","ADMIN")
-                        .requestMatchers("/api/v1/client/{id}").hasAnyAuthority("CLIENT","ADMIN")
-                        .requestMatchers("/api/v1/employee").hasAnyAuthority("EMPLOYEE","ADMIN")
-                        .requestMatchers("/api/v1/employee/{id}").hasAnyAuthority("EMPLOYEE","ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/v1/shipment").hasAnyAuthority("CLIENT","ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/v1/shipment").hasAnyAuthority("EMPLOYEE","ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/v1/shipment").hasAnyAuthority("EMPLOYEE","CLIENT","ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/v1/shipment/list").hasAnyAuthority("EMPLOYEE","ADMIN"))
+                        .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
+                .sessionManagement(session->session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling( (exception) -> exception
+                        .authenticationEntryPoint( (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()))
+                )
+                .addFilter(jwtAuthenticationFilter)
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+    @SuppressWarnings("removal")
+    @Bean
+    AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder())
+                .and()
+                .build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 }
