@@ -43,21 +43,3 @@ tasks.named('test') {
 }
 tasks.jar{enabled = false}
 
-jar{
-	manifest{
-		attributes 'Manifest-Version': '1.0',
-				'Archiver-Version': 'Plexus Archiver',
-				'Created-By': 'Apache Maven 3.6.3',
-				'Built-By': 'Baeldung',
-				'Build-Jdk': '11.0.13'
-	}
-}
-
-springBoot {
-	mainClass = 'com.baeldung.demo.DemoApplication'
-}
-
-ext { startClass = 'com.baeldung.demo.DemoApplication' }
-
-bootJar { './gradlew bootJar' }
-
