@@ -1,6 +1,7 @@
 package com.api.messengerservice.entities;
 
 import com.api.messengerservice.utils.Role;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Hidden
 @Entity
 @Getter
 @Setter
