@@ -74,8 +74,10 @@ public class ShipmentService {
         String deliveryStatusToUpdate = map.get("deliveryStatus").toString();
         String guideNumber = map.get("guideNumber").toString();
 
+
         if (employeeDB.isPresent()) {
-            if (employeeDB.get().getEmployeeType().equalsIgnoreCase("Repartidor") || employeeDB.get().getEmployeeType().equalsIgnoreCase("Coordinador")){
+            String employeeType = employeeDB.get().getEmployeeType();
+            if (employeeType.equalsIgnoreCase("Repartidor") || employeeType.equalsIgnoreCase("Coordinador")){
                 Optional<Shipment> shipmentDB = shipmentRepository.findById(guideNumber);
                 if (shipmentDB.isPresent()){
                     if (isValidUpdateDeliveryStatus(shipmentDB.get().getDeliveryStatus(),deliveryStatusToUpdate)){
@@ -89,7 +91,7 @@ public class ShipmentService {
                 }else
                     throw new DoesNotExistEntityException("The shipment with guide number " + guideNumber + " does not exist");
             }else
-                throw new InvalidEmployeeTypeException("The employee type " + employeeDB.get().getEmployeeType() + " is not autorized");
+                throw new InvalidEmployeeTypeException("The employee type " + employeeDB.get().getEmployeeType() + " is not authorized");
         }else
             throw new DoesNotExistEntityException("The employee with ID " + map.get("employeeID").toString() + " does not exist");
     }

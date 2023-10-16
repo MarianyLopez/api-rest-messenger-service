@@ -19,10 +19,9 @@ public class Runner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (userRepository.count() == 0){
-            userRepository.saveAll(List.of(
-                    new User("admin@gmail.com","$2a$10$pJ7H.65ssjYRhXm8S2k5vOAGUqtgC9hM.SCyklULckvZKz64TV1/O",Role.ADMIN),
-                    new User("user@gmail.com","$2a$10$YNbttnZCdgn1bSw8B6smwuMR6P7KX5UEoNu.iHU1iwdi24PxXzzQO",Role.USER)
-            ));
+            userRepository.save(
+                    new User(1234,"admin","admin@gmail.com","$2a$10$pJ7H.65ssjYRhXm8S2k5vOAGUqtgC9hM.SCyklULckvZKz64TV1/O",Role.ADMIN)
+            );
         }
 
     }

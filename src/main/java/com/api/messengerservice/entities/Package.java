@@ -1,11 +1,13 @@
 package com.api.messengerservice.entities;
 
 import com.api.messengerservice.utils.PackageType;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+@Hidden
 @Entity
 @Getter
 @Setter

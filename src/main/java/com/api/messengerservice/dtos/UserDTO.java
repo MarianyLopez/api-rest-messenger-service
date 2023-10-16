@@ -1,37 +1,36 @@
-package com.api.messengerservice.entities;
+package com.api.messengerservice.dtos;
 
 import com.api.messengerservice.utils.Role;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "An object that represents a user")
-public class User {
-    @Id
-    @Column(nullable = false)
+@Getter
+@Setter
+public class UserDTO {
+
+    @NotNull(message = "The id cannot be null")
     private Integer id;
 
     @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
-    @Email()
+    @NotNull(message = "The email cannot be null")
     private String email;
 
-    @Column(nullable = false)
+    @NotNull(message = "The password cannot be null")
     private String password;
 
-    @Column(nullable = false)
+    @NotNull(message = "The role cannot be null")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private Integer IdAdmin;
+
 }
