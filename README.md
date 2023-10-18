@@ -58,7 +58,7 @@ the following implementations:
 
 # Documentation
 You can view the structure of the controllers in the graphical interface 
-of [Swagger](http://localhost:8080/swagger-ui/index.html), to query the CRUD endpoints.
+of [Swagger]([http://localhost:8080/swagger-ui/index.html](https://api-rest-messenger-service-production.up.railway.app/swagger-ui/index.html)), to query the CRUD endpoints.
 
 # Guide to API access
 
