@@ -36,7 +36,7 @@ public class WebSecurityConfig {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
+                .cors(cors-> corsConfigurationSource())
                 .authorizeHttpRequests(authorizationRequest -> authorizationRequest
                         .requestMatchers("/v3/api-docs/**","/swagger-ui/**","/swagger-resources/**","/configuration/**","/api/v1/user/**").permitAll()
                         .anyRequest().authenticated())
