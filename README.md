@@ -11,7 +11,6 @@
     <li><a href="#documentation">Documentation</a></li>
     <li><a href="#guide-to-api-access">Guide to api access</a></li>
     <li><a href="#contributors">Contributors</a></li>
-    <li><a href="#contact">Contact</a></li>
   </ul>
 </details>
 
