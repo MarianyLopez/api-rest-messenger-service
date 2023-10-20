@@ -36,7 +36,6 @@ public class WebSecurityConfig {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors-> corsConfigurationSource())
                 .authorizeHttpRequests(authorizationRequest -> authorizationRequest
                         .requestMatchers("/v3/api-docs/**","/swagger-ui/**","/swagger-resources/**","/configuration/**","/api/v1/user/**").permitAll()
                         .anyRequest().authenticated())
@@ -64,18 +63,6 @@ public class WebSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // Configura los orígenes permitidos
-        configuration.addAllowedMethod("*"); // Configura los métodos permitidos (GET, POST, etc.)
-        configuration.addAllowedHeader("*"); // Configura los encabezados permitidos
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 
 }
