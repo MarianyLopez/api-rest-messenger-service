@@ -17,7 +17,7 @@ public class MessengerServiceApplication {
 	public WebMvcConfigurer webMvcConfigurer() {
 		return new WebMvcConfigurer() {
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("https://api-rest-messenger-service-production.up.railway.app").allowedMethods("*").allowedHeaders("*");
+				registry.addMapping("/**").allowedOrigins("*").allowedMethods("*").allowedHeaders("*");
 			}
 		};
 	}
