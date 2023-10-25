@@ -45,7 +45,7 @@ the following implementations:
 </p>
 
  * <p align="left">
-   <img src="https://img.shields.io/badge/JWT AND SPRING SECURITY-grey">
+   <img src="https://img.shields.io/badge/SECURITY WITH JWT-Spring Security-blue">
 </p>
 
  * <p align="left">
@@ -57,7 +57,7 @@ the following implementations:
 </p>
 
  * <p align="left">
-   <img src="https://img.shields.io/badge/CI/CD-Github Actions-blue">
+   <img src="https://img.shields.io/badge/CI/CD-Github Actions and Railway-blue">
 </p>
 
 ## Design patterns
