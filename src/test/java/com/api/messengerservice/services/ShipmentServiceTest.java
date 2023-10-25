@@ -41,9 +41,9 @@ class ShipmentServiceTest {
     @Test
     void createShipmentSuccessfully() {
         Client client = new Client(908L,"Juan","Lopez","302987","juan@gmail.com","Carreara 50","Medayor");
-        ShipmentDTO shipmentDTO = new ShipmentDTO(908L,"Cali","Cartagena", "Calle Colombia","Mariany","302222",6,50.000);
+        ShipmentDTO shipmentDTO = new ShipmentDTO(908L,"Cali","Cartagena", "Calle Colombia","Mariany","302222",6,50.000,"Recibido",30000);
         Shipment shipment = new Shipment(client,shipmentDTO.getOriginCity(),shipmentDTO.getDestinationCity(),shipmentDTO.getDestinationAddress(),shipmentDTO.getNamePersonReceives(),shipmentDTO.getPhonePersonReceives(), new Package(shipmentDTO.getWeight(),shipmentDTO.getDeclaredValue()));
-        ShipmentMessageDTO shipmentMessageDTO = new ShipmentMessageDTO(shipment.getId(),shipment.getDeliveryStatus());
+        ShipmentMessageDTO shipmentMessageDTO = new ShipmentMessageDTO(shipment.getId(),shipment.getDeliveryStatus(),shipment.getShipmentPrice());
 
         Mockito.when(clientRepository.findById(shipmentDTO.getClientID())).thenReturn(Optional.of(client));
         Mockito.when(shipmentRepository.save(Mockito.any(Shipment.class))).thenReturn(shipment);
@@ -53,7 +53,7 @@ class ShipmentServiceTest {
 
     @Test
     void createShipmentFailsBecauseClientIdIsNotPresent() {
-        ShipmentDTO shipmentDTO = new ShipmentDTO(908L,"Cali","Cartagena", "Calle Colombia","Mariany","302222",6,50.000);
+        ShipmentDTO shipmentDTO = new ShipmentDTO(908L,"Cali","Cartagena", "Calle Colombia","Mariany","302222",6,50.000,"Recibido",30000);
 
         Mockito.when(clientRepository.findById(shipmentDTO.getClientID())).thenReturn(Optional.empty());
 
@@ -65,7 +65,7 @@ class ShipmentServiceTest {
     @Test
     void getShipmentInformationSuccessfully() {
         Client client = new Client(908L,"Juan","Lopez","302987","juan@gmail.com","Carreara 50","Medayor");
-        ShipmentDTO shipmentDTO = new ShipmentDTO(908L,"Cali","Cartagena", "Calle Colombia","Mariany","302222",6,50.000);
+        ShipmentDTO shipmentDTO = new ShipmentDTO(908L,"Cali","Cartagena", "Calle Colombia","Mariany","302222",6,50.000,"Recibido",30000);
         Shipment shipment = new Shipment(client,shipmentDTO.getOriginCity(),shipmentDTO.getDestinationCity(),shipmentDTO.getDestinationAddress(),shipmentDTO.getNamePersonReceives(),shipmentDTO.getPhonePersonReceives(), new Package(shipmentDTO.getWeight(),shipmentDTO.getDeclaredValue()));
         shipment.setId("GN12345");
         Map<String,String> stringMap = new HashMap<>();

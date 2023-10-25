@@ -35,8 +35,8 @@ class ShipmentControllerTest {
     @Test
     void statusCreatedOnSuccessfulShipmentCreation() {
         Client client = new Client(1001L,"Dilan","Quintero","3006782537","dilan@gmail.com","Carrera 35","Medellín");
-        ShipmentDTO shipmentDTO = new ShipmentDTO(client.getId(),"Sidney","Berlin","Street 23","Carlosky","234321",45,90.000);
-        ShipmentMessageDTO shipmentMessageDTO = new ShipmentMessageDTO("1234Cas","Recibido");
+        ShipmentDTO shipmentDTO = new ShipmentDTO(client.getId(),"Sidney","Berlin","Street 23","Carlosky","234321",45,90.000,"Recibido",30000);
+        ShipmentMessageDTO shipmentMessageDTO = new ShipmentMessageDTO("1234Cas","Recibido",30000);
 
         Mockito.when(shipmentService.create(Mockito.any(ShipmentDTO.class))).thenReturn(shipmentMessageDTO);
 
@@ -51,7 +51,7 @@ class ShipmentControllerTest {
         map.put("guideNumber", "GUIDENUMBER123");
         map.put("deliveryStatus", "En ruta");
         map.put("employeeID", 1234L);
-        ShipmentMessageDTO shipmentMessageDTO = new ShipmentMessageDTO("GUIDENUMBER123","En ruta");
+        ShipmentMessageDTO shipmentMessageDTO = new ShipmentMessageDTO("GUIDENUMBER123","En ruta",30000);
 
         Mockito.when(shipmentService.updateDeliveryStatus(map)).thenReturn(shipmentMessageDTO);
 
@@ -64,7 +64,7 @@ class ShipmentControllerTest {
     void statusOkOnGetShipmentInformation() {
         Map<String,String> map = new HashMap<>();
         map.put("guideNumber", "GUIDENUMBER123");
-        ShipmentDTO shipmentDTO = new ShipmentDTO(1246L,"Sidney","Berlin","Street 23","Carlosky","234321",45,90.000);
+        ShipmentDTO shipmentDTO = new ShipmentDTO(1246L,"Sidney","Berlin","Street 23","Carlosky","234321",45,90.000,"Recibido",30000);
 
         Mockito.when(shipmentService.getShipmentInformation(map)).thenReturn(shipmentDTO);
 
@@ -79,8 +79,8 @@ class ShipmentControllerTest {
         map.put("deliveryStatus", "Recibido");
         map.put("employeeID", 1234L);
         List<ShipmentDTO> shipments = new ArrayList<>();
-        shipments.add(new ShipmentDTO(123L,"Cali","Cartagena", "Calle Colombia","Mariany","302222",6,50.000));
-        shipments.add(new ShipmentDTO(321L,"Cali","Medellín", "Calle Colombia","Mariany","302222",2,50.000));
+        shipments.add(new ShipmentDTO(123L,"Cali","Cartagena", "Calle Colombia","Mariany","302222",6,50.000,"Recibido",30000));
+        shipments.add(new ShipmentDTO(321L,"Cali","Medellín", "Calle Colombia","Mariany","302222",2,50.000,"Recibido",30000));
 
         Mockito.when(shipmentService.getShipmentByDeliveryStatus(map)).thenReturn(shipments);
 

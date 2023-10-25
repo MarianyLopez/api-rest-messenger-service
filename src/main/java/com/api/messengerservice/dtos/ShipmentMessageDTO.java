@@ -13,4 +13,6 @@ public class ShipmentMessageDTO {
     private String guideNumber;
     private String deliveryStatus;
 
+    private double shipmentPrice;
+
 }

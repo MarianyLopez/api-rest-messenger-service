@@ -8,10 +8,13 @@ and its main purpose is to show all the topics that were taught during the last 
 This service provides a company with a structure to manage data with customer and employee
 information and to create and track client shipments.
 
+<img src="https://github.com/MarianyLopez/api-rest-messenger-service/blob/main/DeliveryStatus.png">
+
 <details>
   <summary>Table of Contents</summary>
   <ul>
     <li><a href="#project-overview">Project overview</a></li>
+    <li><a href="#design-patterns">Design patterns</a></li>
     <li><a href="#data-modeling">Data modeling</a></li>
     <li><a href="#documentation">Documentation</a></li>
     <li><a href="#guide-to-api-access">Guide to api access</a></li>
@@ -56,6 +59,11 @@ the following implementations:
  * <p align="left">
    <img src="https://img.shields.io/badge/CI/CD-Github Actions-blue">
 </p>
+
+## Design patterns
+
+### DTO(Data Object Transfer)
+The Data Transfer Object (DTO) design pattern is used to efficiently transfer data between different layers of an application, separating concerns, improving performance and security, and enabling data adaptation. It is useful to ensure that only necessary data is transferred and that changes in the data structure do not affect other parts of the system
 
 ## Data modeling
 
@@ -408,9 +416,6 @@ To obtain a list of shipments by status you must enter the status and id of an e
 ]
 ```
 To update the status of an existing shipment enter the employee identifier, the waybill number of the delivery and the updated status.
-Please note the flow:
-
-<img src="https://github.com/MarianyLopez/api-rest-messenger-service/blob/main/DeliveryStatus.png">
 
 **Request example:**
 ```json

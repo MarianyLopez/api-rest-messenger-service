@@ -46,7 +46,7 @@ public class ShipmentService {
                     shipmentDTO.getNamePersonReceives(), shipmentDTO.getPhonePersonReceives(),
                     new Package(shipmentDTO.getWeight(), shipmentDTO.getDeclaredValue()));
             shipmentRepository.save(shipmentToSave);
-            return new ShipmentMessageDTO(shipmentToSave.getId(),shipmentToSave.getDeliveryStatus());
+            return new ShipmentMessageDTO(shipmentToSave.getId(),shipmentToSave.getDeliveryStatus(),shipmentToSave.getShipmentPrice());
         }
         else {
             throw new InvalidCreateEntityException("Message: The client with ID " + shipmentDTO.getClientID() + " must be registered to be able to send a package");
@@ -66,7 +66,7 @@ public class ShipmentService {
     private ShipmentDTO createShipmentDTO(Shipment shipment) {
         return new ShipmentDTO(shipment.getClient().getId(),shipment.getOriginCity(),shipment.getDestinationCity(),
                 shipment.getDestinationAddress(),shipment.getNamePersonReceives(),shipment.getPhonePersonReceives(),
-                shipment.getAPackage().getWeight(), shipment.getAPackage().getDeclaredValue());
+                shipment.getAPackage().getWeight(), shipment.getAPackage().getDeclaredValue(),shipment.getDeliveryStatus(),shipment.getShipmentPrice());
     }
 
     public ShipmentMessageDTO updateDeliveryStatus(Map<String,Object> map){
@@ -85,7 +85,7 @@ public class ShipmentService {
                             shipmentToUpdate.setDeliveryStatus(deliveryStatusToUpdate);
                             return shipmentRepository.save(shipmentToUpdate);
                         });
-                        return new ShipmentMessageDTO(guideNumber,deliveryStatusToUpdate);
+                        return new ShipmentMessageDTO(guideNumber,deliveryStatusToUpdate,shipmentDB.get().getShipmentPrice());
                     }else
                         throw new RuntimeException("The status change does not comply with validations");
                 }else

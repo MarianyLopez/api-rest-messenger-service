@@ -27,4 +27,10 @@ public class ShipmentDTO {
     private double weight;
     @NotEmpty
     private double declaredValue;
+
+    private String deliveryStatus;
+
+    private double shipmentPrice;
+
+
 }
