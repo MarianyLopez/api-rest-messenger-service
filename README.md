@@ -1,4 +1,4 @@
-<h1 align="center" > Integrative project: Messenger service Rest API :package </h1>  
+<h1 align="center" > Integrative project: Messenger service Rest API 📦 </h1>  
 <p align="right">
    <img src="https://img.shields.io/badge/STATUS-DEVELOPED-green">
 </p>
