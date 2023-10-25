@@ -13,13 +13,13 @@ information and to create and track client shipments.
 <details>
   <summary>Table of Contents</summary>
   <ul>
-    <li><a href="#project-overview">Project overview</a></li>
-    <li><a href="#design-patterns">Design patterns</a></li>
-    <li><a href="#data-modeling">Data modeling</a></li>
-    <li><a href="#documentation">Documentation</a></li>
-    <li><a href="#guide-to-api-access">Guide to api access</a></li>
-    <li><a href="#endpoints">Endpoints</a></li>
-    <li><a href="#contributors">Contributors</a></li>
+	<li><a href="#project-overview">Project overview</a></li>
+	<li><a href="#documentation">Documentation</a></li>
+	<li><a href="#design-patterns">Design patterns</a></li>
+	<li><a href="#data-modeling">Data modeling</a></li>
+	<li><a href="#guide-to-api-access">Guide to api access</a></li>
+	<li><a href="#endpoints">Endpoints</a></li>
+	<li><a href="#contributors">Contributors</a></li>
   </ul>
 </details>
 
@@ -60,6 +60,10 @@ the following implementations:
    <img src="https://img.shields.io/badge/CI/CD-Github Actions and Railway-blue">
 </p>
 
+## Documentation
+You can view the structure of the controllers in the graphical interface 
+of [Swagger](https://api-rest-messenger-service-production.up.railway.app/swagger-ui/index.html), to query the CRUD endpoints.
+
 ## Design patterns
 
 ### DTO(Data Object Transfer)
@@ -69,9 +73,6 @@ The Data Transfer Object (DTO) design pattern is used to efficiently transfer da
 
 <img src="https://github.com/MarianyLopez/api-rest-messenger-service/blob/main/DataModeling.PNG">
 
-## Documentation
-You can view the structure of the controllers in the graphical interface 
-of [Swagger](https://api-rest-messenger-service-production.up.railway.app/swagger-ui/index.html), to query the CRUD endpoints.
 
 ## Guide to API access
 
