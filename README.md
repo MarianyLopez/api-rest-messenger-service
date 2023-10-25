@@ -8,7 +8,7 @@ and its main purpose is to show all the topics that were taught during the last 
 This service provides a company with a structure to manage data with customer and employee
 information and to create and track client shipments.
 
-<img src="https://github.com/MarianyLopez/api-rest-messenger-service/blob/main/DeliveryStatus.png">
+<img src="https://github.com/MarianyLopez/api-rest-messenger-service/blob/main/DeliveryStatus.png" width="700">
 
 <details>
   <summary>Table of Contents</summary>
