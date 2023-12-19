@@ -2,6 +2,7 @@ package com.api.messengerservice.controllers;
 
 import com.api.messengerservice.dtos.ShipmentDTO;
 import com.api.messengerservice.dtos.ShipmentMessageDTO;
+import com.api.messengerservice.dtos.ShipmentResponseDTO;
 import com.api.messengerservice.entities.Client;
 import com.api.messengerservice.services.ShipmentService;
 import org.junit.jupiter.api.Assertions;
@@ -35,7 +36,7 @@ class ShipmentControllerTest {
     @Test
     void statusCreatedOnSuccessfulShipmentCreation() {
         Client client = new Client(1001L,"Dilan","Quintero","3006782537","dilan@gmail.com","Carrera 35","Medellín");
-        ShipmentDTO shipmentDTO = new ShipmentDTO(client.getId(),"Sidney","Berlin","Street 23","Carlosky","234321",45,90.000,"Recibido",30000);
+        ShipmentDTO shipmentDTO = new ShipmentDTO(client.getId(),"Sidney","Berlin","Street 23","Carlosky","234321",45,90.000);
         ShipmentMessageDTO shipmentMessageDTO = new ShipmentMessageDTO("1234Cas","Recibido",30000);
 
         Mockito.when(shipmentService.create(Mockito.any(ShipmentDTO.class))).thenReturn(shipmentMessageDTO);
@@ -64,11 +65,11 @@ class ShipmentControllerTest {
     void statusOkOnGetShipmentInformation() {
         Map<String,String> map = new HashMap<>();
         map.put("guideNumber", "GUIDENUMBER123");
-        ShipmentDTO shipmentDTO = new ShipmentDTO(1246L,"Sidney","Berlin","Street 23","Carlosky","234321",45,90.000,"Recibido",30000);
+        ShipmentResponseDTO shipmentDTO = new ShipmentResponseDTO(1246L,"Sidney","Berlin","Street 23","Carlosky","234321",45,90.000,"Recibido",30000);
 
         Mockito.when(shipmentService.getShipmentInformation(map)).thenReturn(shipmentDTO);
 
-        ResponseEntity<ShipmentDTO> responseEntity = shipmentController.getShipmentInformation(map);
+        ResponseEntity<ShipmentResponseDTO> responseEntity = shipmentController.getShipmentInformation(map);
 
         Assertions.assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
     }
@@ -78,13 +79,13 @@ class ShipmentControllerTest {
         Map<String,Object> map = new HashMap<>();
         map.put("deliveryStatus", "Recibido");
         map.put("employeeID", 1234L);
-        List<ShipmentDTO> shipments = new ArrayList<>();
-        shipments.add(new ShipmentDTO(123L,"Cali","Cartagena", "Calle Colombia","Mariany","302222",6,50.000,"Recibido",30000));
-        shipments.add(new ShipmentDTO(321L,"Cali","Medellín", "Calle Colombia","Mariany","302222",2,50.000,"Recibido",30000));
+        List<ShipmentResponseDTO> shipments = new ArrayList<>();
+        shipments.add(new ShipmentResponseDTO(123L,"Cali","Cartagena", "Calle Colombia","Mariany","302222",6,50.000,"Recibido",30000));
+        shipments.add(new ShipmentResponseDTO(321L,"Cali","Medellín", "Calle Colombia","Mariany","302222",2,50.000,"Recibido",30000));
 
         Mockito.when(shipmentService.getShipmentByDeliveryStatus(map)).thenReturn(shipments);
 
-        ResponseEntity<List<ShipmentDTO>> responseEntity = shipmentController.getShipmentByDeliveryStatus(map);
+        ResponseEntity<List<ShipmentResponseDTO>> responseEntity = shipmentController.getShipmentByDeliveryStatus(map);
         Assertions.assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
     }
 

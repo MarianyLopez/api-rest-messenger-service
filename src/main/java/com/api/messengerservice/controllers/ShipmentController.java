@@ -2,6 +2,7 @@ package com.api.messengerservice.controllers;
 
 import com.api.messengerservice.dtos.ShipmentDTO;
 import com.api.messengerservice.dtos.ShipmentMessageDTO;
+import com.api.messengerservice.dtos.ShipmentResponseDTO;
 import com.api.messengerservice.services.ShipmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.StringToClassMapItem;
@@ -63,7 +64,7 @@ public class ShipmentController {
             @ApiResponse(responseCode = "404", description = "Not Found. The employee does not exist"),
             @ApiResponse(responseCode = "409", description = "Conflict. The values cannot be null or The Delivery Status is not valid")})
     @GetMapping
-    public ResponseEntity<ShipmentDTO> getShipmentInformation(@RequestBody @Schema(
+    public ResponseEntity<ShipmentResponseDTO> getShipmentInformation(@RequestBody @Schema(
             type = "object",
             properties = {
                     @StringToClassMapItem(key = "guideNumber", value = String.class)
@@ -77,7 +78,7 @@ public class ShipmentController {
             @ApiResponse(responseCode = "404", description = "Not Found. The employee does not exist"),
             @ApiResponse(responseCode = "409", description = "Conflict. The values cannot be null or The Delivery Status is not valid")})
     @GetMapping("/list")
-    public ResponseEntity<List<ShipmentDTO>> getShipmentByDeliveryStatus(@RequestBody @Schema(
+    public ResponseEntity<List<ShipmentResponseDTO>> getShipmentByDeliveryStatus(@RequestBody @Schema(
             type = "object",
             properties = {
                     @StringToClassMapItem(key = "deliveryStatus", value = String.class),

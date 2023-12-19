@@ -2,6 +2,7 @@ package com.api.messengerservice.services;
 
 import com.api.messengerservice.dtos.ShipmentDTO;
 import com.api.messengerservice.dtos.ShipmentMessageDTO;
+import com.api.messengerservice.dtos.ShipmentResponseDTO;
 import com.api.messengerservice.entities.Client;
 import com.api.messengerservice.entities.Employee;
 import com.api.messengerservice.entities.Package;
@@ -53,20 +54,20 @@ public class ShipmentService {
         }
     }
 
-    public ShipmentDTO getShipmentInformation(Map<String,String> stringMap) {
+    public ShipmentResponseDTO getShipmentInformation(Map<String,String> stringMap) {
         Optional<Shipment> shipmentDB = shipmentRepository.findById(stringMap.get("guideNumber"));
 
         if (shipmentDB.isPresent()) {
-            return createShipmentDTO(shipmentDB.get());
+            return createShipmentResponseDTO(shipmentDB.get());
         }
         else
             throw new DoesNotExistEntityException("The shipment with guide number " + stringMap.get("guideNumber") + " does not exist");
     }
 
-    private ShipmentDTO createShipmentDTO(Shipment shipment) {
-        return new ShipmentDTO(shipment.getClient().getId(),shipment.getOriginCity(),shipment.getDestinationCity(),
+    private ShipmentResponseDTO createShipmentResponseDTO(Shipment shipment) {
+        return new ShipmentResponseDTO(shipment.getClient().getId(),shipment.getOriginCity(),shipment.getDestinationCity(),
                 shipment.getDestinationAddress(),shipment.getNamePersonReceives(),shipment.getPhonePersonReceives(),
-                shipment.getAPackage().getWeight(), shipment.getAPackage().getDeclaredValue(),shipment.getDeliveryStatus(),shipment.getShipmentPrice());
+                shipment.getAPackage().getWeight(), shipment.getAPackage().getDeclaredValue(),shipment.getDeliveryStatus(), shipment.getShipmentPrice());
     }
 
     public ShipmentMessageDTO updateDeliveryStatus(Map<String,Object> map){
@@ -96,28 +97,28 @@ public class ShipmentService {
             throw new DoesNotExistEntityException("The employee with ID " + map.get("employeeID").toString() + " does not exist");
     }
 
-    public List<ShipmentDTO> getShipmentByDeliveryStatus(Map<String,Object> map) {
+    public List<ShipmentResponseDTO> getShipmentByDeliveryStatus(Map<String,Object> map) {
         Optional<Employee> employeeDB = employeeRepository.findById(((Number)map.get("employeeID")).longValue());
         if (employeeDB.isPresent()){
             if (isCorrectDeliveryStatus(map.get("deliveryStatus").toString())) {
                 List<Shipment> shipments = shipmentRepository.findByDeliveryStatus(map.get("deliveryStatus").toString());
-                List<ShipmentDTO> shipmentDTOS = new ArrayList<>();
+                List<ShipmentResponseDTO> shipmentResponseDTOS = new ArrayList<>();
                 for (Shipment shipment: shipments) {
-                    ShipmentDTO shipmentDTO = createShipmentDTO(shipment);
-                    shipmentDTOS.add(shipmentDTO);
+                    ShipmentResponseDTO shipmentResDTO = createShipmentResponseDTO(shipment);
+                    shipmentResponseDTOS.add(shipmentResDTO);
                 }
-                return shipmentDTOS;
+                return shipmentResponseDTOS;
             }else
                 throw new RuntimeException("The Delivery Status is not valid");
         }else
             throw new DoesNotExistEntityException("The employee with ID " + map.get("employeeID").toString() + " does not exist");
     }
 
-    private boolean isValidUpdateDeliveryStatus(String status, String newStatus){
+    private boolean isValidUpdateDeliveryStatus(String status, String newStatus) {
         return (status.equalsIgnoreCase("Recibido") && newStatus.equalsIgnoreCase("En ruta")) || (status.equalsIgnoreCase("En ruta") && newStatus.equalsIgnoreCase("Entregado"));
     }
 
-    private boolean isCorrectDeliveryStatus (String delivery) {
+    private boolean isCorrectDeliveryStatus(String delivery) {
         return (delivery.equalsIgnoreCase(DeliveryStatus.RECIBED.getNameSpanish()) || delivery.equalsIgnoreCase(DeliveryStatus.ONROUTE.getNameSpanish()) || delivery.equalsIgnoreCase(DeliveryStatus.DELIVERED.getNameSpanish()));
     }
 }
