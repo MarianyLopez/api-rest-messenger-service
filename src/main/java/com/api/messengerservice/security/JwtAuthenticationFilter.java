@@ -1,6 +1,7 @@
 package com.api.messengerservice.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +12,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
@@ -41,9 +45,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
 
         String token = JwtUtils.createToken(userDetails.getUsername());
+        Map<String,String> map = new HashMap<>();
+        map.put("Bearer Token",token);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         response.addHeader("Authorization","Bearer " + token);
-        response.getWriter().flush();
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        out.println(objectMapper.writeValueAsString(map));
+        out.flush();
 
         super.successfulAuthentication(request, response, chain, authResult);
     }

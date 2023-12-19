@@ -31,9 +31,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
     @Operation(summary = "Endpoint to log in",description = "In the body of the request it receives a Json with the user's email and password.")
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Schema(
@@ -43,15 +40,7 @@ public class UserController {
                     @StringToClassMapItem(key = "password",value = String.class)
             }
     ) Map<String,String> loginRequest) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.get("email"), loginRequest.get("password"))
-            );
-            String token = JwtUtils.createToken(loginRequest.get("email"));
-            return ResponseEntity.ok(JwtUtils.getAuthentication(token));
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication error: " + e.getMessage());
-        }
+        return userService.login(loginRequest);
     }
     @Operation(summary = "Endpoint to create a user",description = "In the body of the request it receives a Json with the user data needed to create it. " +
             "Remember that there are only two types of user (ADMIN and USER) and only an admin registered in the database can create other admin users. Users of type 'USER' do not require the 'idAdmin' field to be sent.")
@@ -60,7 +49,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Not found. You cannot create a user of type admin because the idAdmin does not exist"),
             @ApiResponse(responseCode = "409", description = "Conflict. The values cannot be null or the user already exists")})
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody UserDTO user){
+    public ResponseEntity<String> signUp(@RequestBody UserDTO user) {
        return ResponseEntity.status(HttpStatus.CREATED).body(userService.signUp(user));
     }
 
